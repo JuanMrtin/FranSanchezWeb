@@ -1,0 +1,319 @@
+/* ============================================================
+   FRAN SÁNCHEZ EXCAVACIONES — SISTEMA VISUAL
+   Identidad industrial: negro carbón, amarillo maquinaria,
+   blanco roto y gris acero. Lenguaje técnico (planos, cotas,
+   curvas de nivel) usado con moderación.
+   Este archivo es la ÚNICA fuente de tokens y primitivas.
+   Los componentes usan estos tokens, no valores sueltos.
+   ============================================================ */
+
+/* ── Tokens ─────────────────────────────────────────────────── */
+:root {
+  /* Color */
+  --color-deep:      #080808;   /* paneles y superficies profundas */
+  --color-carbon:    #111111;   /* fondo principal */
+  --color-surface:   #171717;   /* superficie elevada 1 */
+  --color-surface2:  #1e1e1e;   /* superficie elevada 2 */
+  --color-yellow:    #FFAA18;   /* acento maquinaria */
+  --color-yellow-lt: #FFC04D;   /* hover / iluminación */
+  --color-yellow-dk: #D98A00;   /* pressed / detalles */
+  --color-cream:     #F4F2ED;   /* titulares */
+  --color-steel:     #9A9EA4;   /* texto secundario (7:1 sobre carbón) */
+  --color-steel-dk:  #5B5F66;   /* solo decorativo: divisores, ticks */
+  --color-line:        rgba(244, 242, 237, 0.12);
+  --color-line-strong: rgba(244, 242, 237, 0.24);
+  --color-glow:        rgba(255, 170, 24, 0.14);
+  --color-danger:    #FF6B5E;   /* solo errores de formulario */
+  --color-ok:        #7FD18B;   /* solo confirmaciones */
+
+  /* Alias heredados (no usar en código nuevo) */
+  --color-metal:    var(--color-steel);
+  --color-metal-dk: var(--color-steel-dk);
+  --color-border:   var(--color-line);
+
+  /* Tipografía */
+  --font-display: 'Barlow Condensed', 'Arial Narrow', 'Roboto Condensed', Arial, sans-serif;
+  --font-body:    'Inter Variable', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  --fs-display-xl: clamp(2.75rem, 1.15rem + 6.4vw, 7.25rem);   /* hero */
+  --fs-display-l:  clamp(2.25rem, 1.2rem + 4.2vw, 5rem);       /* títulos de sección */
+  --fs-display-m:  clamp(1.6rem, 1.1rem + 2vw, 2.75rem);       /* subtítulos */
+  --fs-lead:       clamp(1.05rem, 0.98rem + 0.4vw, 1.25rem);
+  --fs-body:       1rem;
+  --fs-small:      0.875rem;
+  --fs-label:      0.75rem;
+  --measure:       62ch;       /* ancho máximo de párrafo */
+
+  /* Espaciado (escala 8pt) */
+  --space-xs:  0.5rem;
+  --space-sm:  1rem;
+  --space-md:  2rem;
+  --space-lg:  4rem;
+  --space-xl:  6rem;
+  --gutter:    clamp(1.25rem, 4vw, 3rem);
+  --section-y: clamp(4.5rem, 9vw, 8.5rem);
+  --container: 1360px;
+  --header-h:  76px;   /* móvil y tablet; en escritorio ver más abajo */
+
+  /* Radios: formas casi rectas, carácter industrial */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+
+  /* Movimiento */
+  --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast:   180ms;
+  --dur:        360ms;
+  --dur-slow:   720ms;
+  --duration:   var(--dur);   /* alias heredado */
+
+  /* Capas */
+  --z-stage:  1;      /* canvas 3D fijo */
+  --z-page:   2;      /* secciones sobre el canvas */
+  --z-header: 100;
+  --z-modal:  200;
+
+  --shadow-panel: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+@media (min-width: 1025px) { :root { --header-h: 90px; } }
+
+/* ── Reset y base ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-h) + 8px);
+  background: var(--color-carbon);
+}
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+body {
+  background: var(--color-carbon);
+  color: var(--color-cream);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg, video, canvas { display: block; max-width: 100%; }
+
+a { color: inherit; text-decoration: none; }
+
+button { cursor: pointer; border: none; background: none; font-family: inherit; color: inherit; }
+
+ul, ol { list-style: none; }
+
+::selection { background: var(--color-yellow); color: var(--color-carbon); }
+
+/* Capas: el canvas 3D vive detrás; las secciones se apilan por encima */
+main > section,
+.site-footer { position: relative; z-index: var(--z-page); }
+/* Evita scroll horizontal por elementos que entran desde un lateral (.reveal-left/right) */
+main { overflow-x: clip; }
+
+/* ── Accesibilidad ──────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-yellow);
+  outline-offset: 3px;
+}
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--color-deep); }
+::-webkit-scrollbar-thumb { background: var(--color-steel-dk); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-yellow); }
+
+/* ── Tipografía ─────────────────────────────────────────────── */
+.display-1,
+.display-2,
+.display-3 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  color: var(--color-cream);
+  text-wrap: balance;
+}
+.display-1 { font-size: var(--fs-display-xl); font-weight: 900; line-height: 0.92; letter-spacing: -0.012em; }
+.display-2 { font-size: var(--fs-display-l);  font-weight: 800; line-height: 0.95; letter-spacing: -0.01em; }
+.display-3 { font-size: var(--fs-display-m);  font-weight: 700; line-height: 1.05; letter-spacing: 0; }
+
+.lead { font-size: var(--fs-lead); line-height: 1.65; color: var(--color-steel); max-width: var(--measure); }
+.text-steel { color: var(--color-steel); }
+.text-yellow { color: var(--color-yellow); }
+
+.label-mono {
+  font-family: var(--font-display);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-yellow);
+}
+
+/* Etiqueta de sección numerada:
+   <p class="eyebrow"><span class="eyebrow-num">02</span><span class="eyebrow-line"></span>Servicios</p> */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-family: var(--font-display);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-steel);
+}
+.eyebrow-num { color: var(--color-yellow); font-variant-numeric: tabular-nums; }
+.eyebrow-line { width: 2.75rem; height: 1px; background: var(--color-yellow); transform-origin: left center; }
+
+/* Cabecera estándar de sección */
+.section { position: relative; padding-block: var(--section-y); }
+.section-head { display: grid; gap: var(--space-sm); margin-bottom: clamp(2.5rem, 5vw, 4.5rem); }
+.section-head .lead { margin-top: 0.25rem; }
+
+/* ── Lenguaje técnico ───────────────────────────────────────── */
+.divider-yellow { width: 3rem; height: 3px; background: var(--color-yellow); display: block; margin: var(--space-sm) 0; }
+.section-tag { display: inline-flex; align-items: center; gap: 0.6em; margin-bottom: var(--space-sm); } /* heredado */
+.section-tag::before { content: ''; display: block; width: 1.5rem; height: 2px; background: var(--color-yellow); }
+
+/* Regla con marcas de escala, como una regla de plano */
+.tech-rule {
+  height: 8px;
+  border-top: 1px solid var(--color-line-strong);
+  background: repeating-linear-gradient(90deg, var(--color-line-strong) 0 1px, transparent 1px 12px) top / 100% 5px no-repeat;
+}
+
+/* Marco con esquinas de registro, como un plano */
+.tech-frame { position: relative; --bk: 18px; }
+.tech-frame::before,
+.tech-frame::after {
+  content: '';
+  position: absolute;
+  width: var(--bk);
+  height: var(--bk);
+  border: 1px solid var(--color-yellow);
+  pointer-events: none;
+}
+.tech-frame::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+.tech-frame::after  { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+
+/* Curvas de nivel decorativas (public/images/topo.svg), muy tenues */
+.topo-bg { position: relative; isolation: isolate; }
+.topo-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url('/images/topo.svg') center / cover no-repeat;
+  opacity: 0.07;
+  pointer-events: none;
+}
+
+/* ── Botones ────────────────────────────────────────────────── */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  min-height: 48px;
+  padding: 0.8em 1.7em;
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  transition:
+    background-color var(--dur) var(--ease-out),
+    color var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out),
+    box-shadow var(--dur) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateX(-101%);
+  transition: transform var(--dur) var(--ease-out);
+  pointer-events: none;
+}
+.btn > * { position: relative; }
+.btn svg { transition: transform var(--dur) var(--ease-out); flex-shrink: 0; }
+.btn:hover::before { transform: translateX(0); }
+.btn:hover svg:last-child:not(:first-child) { transform: translateX(3px); }
+.btn:active { transform: translateY(1px) scale(0.985); }
+.btn[disabled], .btn[aria-disabled='true'] { opacity: 0.55; pointer-events: none; }
+
+.btn-primary { background: var(--color-yellow); color: var(--color-carbon); }
+.btn-primary:hover { background: var(--color-yellow-lt); box-shadow: 0 0 0 1px var(--color-yellow-lt), 0 10px 34px rgba(255, 170, 24, 0.32); }
+.btn-primary:active { background: var(--color-yellow-dk); }
+.btn-primary:focus-visible { outline-color: var(--color-cream); }
+
+.btn-outline { background: transparent; color: var(--color-cream); border: 1.5px solid var(--color-line-strong); }
+.btn-outline:hover { border-color: var(--color-yellow); color: var(--color-yellow); box-shadow: 0 0 24px rgba(255, 170, 24, 0.12); }
+
+.btn-ghost { background: transparent; color: var(--color-yellow); padding-left: 0; padding-right: 0; min-height: 44px; }
+.btn-ghost:hover { color: var(--color-yellow-lt); }
+
+.link-yellow {
+  color: var(--color-yellow);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.link-yellow:hover { color: var(--color-yellow-lt); }
+
+/* ── Layout ─────────────────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+/* ── Aparición al hacer scroll (hook useReveal) ─────────────── */
+.reveal, .reveal-left, .reveal-right {
+  opacity: 0;
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out);
+  transition-delay: var(--delay, 0s);
+}
+.reveal       { transform: translateY(24px); }
+.reveal-left  { transform: translateX(-32px); }
+.reveal-right { transform: translateX(32px); }
+.reveal.visible, .reveal-left.visible, .reveal-right.visible { opacity: 1; transform: none; }
+
+/* Sin JS el contenido siempre es visible */
+.no-js .reveal, .no-js .reveal-left, .no-js .reveal-right { opacity: 1; transform: none; }
+
+/* ── Movimiento reducido ────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal, .reveal-left, .reveal-right { opacity: 1 !important; transform: none !important; }
+}

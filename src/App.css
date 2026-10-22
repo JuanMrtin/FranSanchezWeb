@@ -1,0 +1,21 @@
+/* ── App global ──────────────────────────────────────────────── */
+
+/* Enlace «saltar al contenido» (primer elemento focusable de la página) */
+.skip-link {
+  position: fixed;
+  top: -120px;
+  left: 1rem;
+  z-index: calc(var(--z-modal) + 10);
+  background: var(--color-yellow);
+  color: var(--color-carbon);
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.7em 1.3em;
+  border-radius: var(--radius-sm);
+  transition: top var(--dur-fast) var(--ease-out);
+}
+.skip-link:focus { top: 1rem; outline: 2px solid var(--color-carbon); outline-offset: 2px; }
+
+#main-content:focus { outline: none; }
