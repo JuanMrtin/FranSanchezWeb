@@ -1,0 +1,5 @@
+# Se permite el rastreo de todo el sitio.
+# Si se define VITE_SITE_URL, `npm run build` añade aquí la línea Sitemap
+# y genera sitemap.xml (ver vite.config.ts). Sin dominio no se declara sitemap.
+User-agent: *
+Allow: /
