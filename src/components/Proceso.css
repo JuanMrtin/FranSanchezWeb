@@ -1,0 +1,180 @@
+/* ── 05 Proceso ──────────────────────────────────────────────── */
+.proceso {
+  position: relative;
+  padding-block: var(--section-y);
+  background: var(--color-deep);
+  border-top: 1px solid var(--color-line);
+  overflow: clip;
+}
+.proceso-acento { color: var(--color-yellow); }
+
+.proceso-cab {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-sm);
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+}
+.proceso-cab .lead { max-width: 52ch; }
+
+/* ── Línea de proceso ───────────────────────────────────────── */
+.proceso-lista {
+  --nodo: 3.5rem;
+  --r: calc(var(--nodo) / 2);
+  --g: clamp(1.25rem, 3vw, 3rem);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--g);
+  margin-bottom: clamp(3.5rem, 7vw, 6rem);
+}
+.proceso-paso { position: relative; display: grid; align-content: start; gap: var(--space-sm); }
+
+/* Tramo de línea de cada paso hacia el siguiente: base + relleno que se dibuja */
+.proceso-paso:not(:last-child)::before,
+.proceso-paso:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: calc(var(--r) - 1px);
+  left: var(--r);
+  width: calc(100% + var(--g));
+  height: 2px;
+  transform-origin: left center;
+}
+.proceso-paso:not(:last-child)::before { background: var(--color-line-strong); }
+.proceso-paso:not(:last-child)::after {
+  background: var(--color-yellow);
+  transform: scaleX(var(--seg, 1));
+}
+
+.proceso-nodo {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: var(--nodo);
+  height: var(--nodo);
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-yellow);
+  background: var(--color-deep);
+  border: 2px solid var(--color-yellow);
+  border-radius: 50%;
+  transition:
+    background-color var(--dur) var(--ease-out),
+    color var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out);
+}
+/* Con animación activa, los nodos aún no alcanzados quedan apagados */
+.proceso-lista[data-anim] .proceso-paso:not(.is-on) .proceso-nodo {
+  color: var(--color-steel);
+  border-color: var(--color-steel-dk);
+}
+.proceso-lista[data-anim] .proceso-paso.is-on .proceso-nodo {
+  color: var(--color-carbon);
+  background: var(--color-yellow);
+}
+
+.proceso-paso-titulo {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 1.1rem + 0.9vw, 1.9rem);
+  font-weight: 700;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: var(--color-cream);
+  text-wrap: balance;
+}
+.proceso-paso-desc { margin-top: 0.5rem; font-size: var(--fs-body); color: var(--color-steel); max-width: 34ch; }
+
+/* ── Información para el presupuesto ───────────────────────── */
+.proceso-datos {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  padding: clamp(1.5rem, 4vw, 3.5rem);
+  background: var(--color-carbon);
+  border: 1px solid var(--color-line);
+}
+.proceso-datos-intro { display: grid; align-content: start; justify-items: start; gap: var(--space-sm); }
+.proceso-datos-intro .display-3 { max-width: 16ch; }
+.proceso-datos-texto { max-width: 44ch; color: var(--color-steel); }
+.proceso-acciones { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: var(--space-xs); }
+.proceso-llamar { display: flex; align-items: center; gap: 0.3em; min-height: 44px; color: var(--color-steel); }
+.proceso-llamar a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }
+
+.proceso-checklist { display: grid; align-content: start; }
+.proceso-dato {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  gap: var(--space-sm);
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--color-line);
+}
+.proceso-dato:first-child { padding-top: 0; }
+.proceso-dato:last-child { border-bottom: 0; padding-bottom: 0; }
+.proceso-marca {
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-top: 0.2rem;
+  color: var(--color-carbon);
+  background: var(--color-yellow);
+  border-radius: var(--radius-sm);
+}
+.proceso-dato-titulo {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-cream);
+}
+.proceso-dato-cond {
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--color-steel);
+}
+.proceso-dato-detalle { margin-top: 0.2rem; font-size: var(--fs-small); color: var(--color-steel); }
+
+/* ── Adaptación ─────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .proceso-datos { grid-template-columns: minmax(0, 1fr); }
+  .proceso-datos-intro .display-3 { max-width: 24ch; }
+}
+
+/* Móvil y tablet vertical: la línea corre por la izquierda */
+@media (max-width: 900px) {
+  .proceso-lista { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .proceso-paso {
+    grid-template-columns: var(--nodo) minmax(0, 1fr);
+    gap: var(--space-sm);
+    padding-bottom: var(--space-lg);
+  }
+  .proceso-paso:last-child { padding-bottom: 0; }
+  .proceso-paso:not(:last-child)::before,
+  .proceso-paso:not(:last-child)::after {
+    top: var(--r);
+    left: calc(var(--r) - 1px);
+    width: 2px;
+    height: 100%;
+    transform-origin: center top;
+  }
+  .proceso-paso:not(:last-child)::after { transform: scaleY(var(--seg, 1)); }
+  .proceso-texto { padding-top: 0.55rem; }
+  .proceso-paso-desc { max-width: 46ch; }
+}
+
+@media (max-width: 600px) {
+  .proceso-lista { --nodo: 3rem; }
+  .proceso-acciones { flex-direction: column; justify-self: stretch; width: 100%; }
+  .proceso-acciones .btn { width: 100%; }
+}
+
+/* Sin animación: línea completa y todos los nodos encendidos (sin JS ni scrub) */
+@media (prefers-reduced-motion: reduce) {
+  .proceso-paso:not(:last-child)::after { transform: none; }
+}

@@ -1,0 +1,165 @@
+/* ── 04 Empresa ──────────────────────────────────────────────── */
+.empresa {
+  position: relative;
+  padding-block: var(--section-y);
+  background: var(--color-carbon);
+  border-top: 1px solid var(--color-line);
+  overflow: clip;
+}
+
+.empresa-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(2.5rem, 6vw, 6rem);
+  align-items: center;
+}
+
+/* ── Texto ──────────────────────────────────────────────────── */
+.empresa-texto { display: grid; justify-items: start; gap: var(--space-md); }
+.empresa-texto .eyebrow { margin-bottom: calc(var(--space-sm) * -1); }
+.empresa-acento { color: var(--color-yellow); }
+
+.empresa-cuerpo { display: grid; gap: var(--space-sm); max-width: 56ch; }
+.empresa-enfoque { font-size: var(--fs-body); color: var(--color-steel); max-width: 52ch; }
+
+/* Lema de la marca */
+.empresa-lema { border-left: 3px solid var(--color-yellow); padding: 0.2rem 0 0.2rem 1.1rem; }
+.empresa-lema blockquote {
+  font-family: var(--font-display);
+  font-size: var(--fs-display-m);
+  font-weight: 700;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: var(--color-cream);
+  text-wrap: balance;
+  max-width: 24ch;
+}
+
+/* Cifras (solo si hay datos confirmados) */
+.empresa-cifras {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md) var(--space-lg);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-line);
+  width: 100%;
+}
+.empresa-cifra { display: flex; flex-direction: column-reverse; gap: 0.25rem; }
+.empresa-cifra-valor {
+  font-family: var(--font-display);
+  font-size: var(--fs-display-m);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--color-yellow);
+  font-variant-numeric: tabular-nums;
+}
+.empresa-cifra-etiqueta {
+  font-family: var(--font-display);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-steel);
+}
+
+.empresa-acciones { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+/* ── Plano con el logotipo ──────────────────────────────────── */
+.empresa-visual { display: grid; gap: var(--space-sm); }
+
+.empresa-plano {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  display: grid;
+  place-items: center;
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  background:
+    radial-gradient(ellipse 60% 55% at 50% 48%, var(--color-glow), transparent 70%),
+    var(--color-deep);
+  border: 1px solid var(--color-line);
+}
+.empresa-logo {
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+}
+/* Curvas de nivel propias del plano, recortadas al marco */
+.empresa-plano__topo {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.empresa-plano__topo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('/images/topo.svg') 55% 45% / 150% auto no-repeat;
+  opacity: 0.12;
+}
+/* Cruces de registro (esquinas superior derecha e inferior izquierda) */
+.empresa-reg { position: absolute; width: 13px; height: 13px; pointer-events: none; color: var(--color-yellow); }
+.empresa-reg::before,
+.empresa-reg::after { content: ''; position: absolute; background: currentColor; }
+.empresa-reg::before { left: 6px; top: 0; width: 1px; height: 13px; }
+.empresa-reg::after  { top: 6px; left: 0; width: 13px; height: 1px; }
+.empresa-reg--tr { top: -7px; right: -7px; }
+.empresa-reg--bl { bottom: -7px; left: -7px; }
+
+/* Cotas: solo trazo, sin cifras inventadas */
+.empresa-cota { position: absolute; color: var(--color-steel-dk); pointer-events: none; }
+.empresa-cota--h { left: 0; right: 0; bottom: calc(100% + 10px); width: 100%; height: 8px; }
+.empresa-cota--v { top: 0; bottom: 0; left: calc(100% + 10px); width: 8px; height: 100%; }
+
+/* Cajetín de plano */
+.empresa-cajetin {
+  display: grid;
+  border: 1px solid var(--color-line);
+  background: var(--color-deep);
+}
+.empresa-cajetin > div {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--space-sm);
+  padding: 0.65rem 1rem;
+}
+.empresa-cajetin > div + div { border-top: 1px solid var(--color-line); }
+.empresa-cajetin dt {
+  font-family: var(--font-display);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-steel);
+}
+.empresa-cajetin dd {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-cream);
+}
+/* El enlace ocupa toda la altura de la fila (área táctil ≥ 44 px) */
+.empresa-cajetin a { display: block; margin-block: -0.65rem; padding-block: 0.65rem; transition: color var(--dur-fast) var(--ease-out); }
+.empresa-cajetin a:hover { color: var(--color-yellow); }
+
+/* ── Adaptación ─────────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .empresa-layout { grid-template-columns: minmax(0, 1fr); gap: var(--space-lg); align-items: start; }
+  .empresa-visual { max-width: 640px; }
+  .empresa-cota--v { display: none; }
+  /* Apilado: el visual sube en vertical en lugar de entrar de lado (sin desbordes) */
+  .empresa-visual.reveal-right:not(.visible) { transform: translateY(24px); }
+}
+
+@media (max-width: 600px) {
+  .empresa-acciones { flex-direction: column; justify-self: stretch; width: 100%; }
+  .empresa-acciones .btn { width: 100%; }
+  .empresa-cajetin > div { grid-template-columns: 5.25rem minmax(0, 1fr); padding-inline: 0.75rem; }
+  .empresa-cajetin dd { font-size: 1rem; }
+  .empresa-lema blockquote { max-width: none; }
+}

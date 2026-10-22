@@ -1,0 +1,74 @@
+/* ── Pictogramas de servicio ──────────────────────────────────
+   Trazo fino de plano técnico. Cada trazo se «dibuja» con
+   stroke-dasharray (pathLength=1 en el SVG) cuando el contenedor recibe
+   .visible (hook useReveal) o .pg-in. Los contenedores que reaccionen al
+   hover/foco llevan .pg-host. */
+
+.pg {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  overflow: visible;
+  color: var(--color-steel);
+  transition: color var(--dur) var(--ease-out);
+}
+
+/* Estado inicial: trazo oculto. Se dibuja al entrar en pantalla, escalonado por --i */
+.pg-t {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  stroke-linecap: butt;
+  transition: stroke-dashoffset 1.1s var(--ease-out) calc(var(--i, 0) * 70ms);
+}
+:is(.visible, .pg-in) .pg-t,
+.no-js .pg-t { stroke-dashoffset: 0; }
+
+.pg-acc { stroke: var(--color-yellow); }
+.pg-faint { stroke-opacity: 0.4; }
+
+/* Rellenos de acento: aparecen cuando el dibujo ya va avanzado */
+.pg-fill {
+  fill: var(--color-yellow);
+  fill-opacity: 0;
+  transition:
+    stroke-dashoffset 1.1s var(--ease-out) calc(var(--i, 0) * 70ms),
+    fill-opacity 0.8s var(--ease-out) calc(var(--i, 0) * 70ms + 500ms);
+}
+:is(.visible, .pg-in) .pg-fill,
+.no-js .pg-fill { fill-opacity: 0.14; }
+
+/* Hover / foco: el trazo gana contraste */
+.pg-host:is(:hover, :focus-within) .pg { color: var(--color-cream); }
+
+/* Sin movimiento: todo dibujado desde el principio */
+@media (prefers-reduced-motion: reduce) {
+  .pg-t { stroke-dashoffset: 0; }
+  .pg-fill { fill-opacity: 0.14; }
+}
+
+/* ── Microanimaciones (solo hover/foco, solo con movimiento permitido) ── */
+@media (prefers-reduced-motion: no-preference) {
+  .pg-host:is(:hover, :focus-within) .pg-acc {
+    animation: pg-redibujar 0.9s var(--ease-out) both;
+  }
+  .pg-host:is(:hover, :focus-within) .pg-bob     { animation: pg-bob 1.3s ease-in-out infinite alternate; }
+  .pg-host:is(:hover, :focus-within) .pg-swing   { animation: pg-swing 1.1s ease-in-out infinite alternate; }
+  .pg-host:is(:hover, :focus-within) .pg-spin    { animation: pg-spin 2.6s linear infinite; }
+  .pg-host:is(:hover, :focus-within) .pg-sway    { animation: pg-sway 1.6s ease-in-out infinite alternate; }
+  .pg-host:is(:hover, :focus-within) .pg-pulse   { animation: pg-pulse 1.1s ease-in-out infinite alternate; }
+  .pg-host:is(:hover, :focus-within) .pg-caida   { animation: pg-caida 1.4s ease-in infinite; }
+  .pg-host:is(:hover, :focus-within) .pg-levanta { animation: pg-levanta 1.4s ease-in-out infinite alternate; }
+  .pg-host:is(:hover, :focus-within) .pg-fase-a  { animation: pg-fase 1.2s ease-in-out infinite alternate; }
+  .pg-host:is(:hover, :focus-within) .pg-fase-b  { animation: pg-fase 1.2s ease-in-out infinite alternate-reverse; }
+  .pg-host:is(:hover, :focus-within) .pg-jalon   { animation: pg-fase 0.9s ease-in-out infinite alternate; }
+}
+
+@keyframes pg-redibujar { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes pg-bob       { from { transform: translateY(0); } to { transform: translateY(-3px); } }
+@keyframes pg-swing     { from { transform: rotate(-16deg); } to { transform: rotate(36deg); } }
+@keyframes pg-spin      { to { transform: rotate(360deg); } }
+@keyframes pg-sway      { from { transform: rotate(-2.5deg); } to { transform: rotate(2.5deg); } }
+@keyframes pg-pulse     { from { opacity: 1; } to { opacity: 0.35; } }
+@keyframes pg-caida     { 0% { transform: translateY(0); opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(8px); opacity: 0; } }
+@keyframes pg-levanta   { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+@keyframes pg-fase      { from { fill-opacity: 0.04; } to { fill-opacity: 0.36; } }

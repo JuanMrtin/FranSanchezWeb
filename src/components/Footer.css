@@ -1,0 +1,236 @@
+/* ── Footer · sección 07 ─────────────────────────────────────────
+   Franja CTA sobre curvas de nivel, cuerpo en negro profundo, marca de agua
+   tipográfica recortada y línea inferior con los enlaces legales.
+   Prefijo de clases: ftr-  */
+
+.ftr {
+  background: var(--color-deep);
+  border-top: 1px solid var(--color-line-strong);
+}
+
+/* ── Franja CTA ───────────────────────────────────────────── */
+.ftr-cta {
+  background-color: var(--color-carbon);
+  border-bottom: 1px solid var(--color-line);
+  overflow: hidden;
+}
+/* Iluminación ambiental tras los botones */
+.ftr-cta::after {
+  content: '';
+  position: absolute;
+  right: -10%;
+  top: 50%;
+  width: 55%;
+  aspect-ratio: 1;
+  transform: translateY(-50%);
+  background: radial-gradient(closest-side, var(--color-glow), transparent);
+  pointer-events: none;
+  z-index: -1;
+}
+.ftr-cta-inner {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-md) var(--space-lg);
+  flex-wrap: wrap;
+  padding-block: clamp(3.5rem, 7vw, 6rem);
+}
+.ftr-cta-text { display: grid; gap: var(--space-sm); flex: 1 1 28rem; max-width: 52rem; }
+.ftr-cta-title { max-width: 16ch; }
+.ftr-cta-actions {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 0.75rem;
+  flex: 0 0 auto;
+}
+/* Tercera vía (formulario): enlace discreto bajo los dos botones */
+.ftr-cta-form { grid-column: 1 / -1; justify-self: start; margin-top: 0.25rem; }
+
+/* ── Cuerpo ───────────────────────────────────────────────── */
+.ftr-body { position: relative; overflow: hidden; padding-top: clamp(3rem, 6vw, 5rem); }
+
+.ftr-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.2fr) minmax(0, 0.7fr);
+  gap: var(--space-md) clamp(2rem, 4.5vw, 4.5rem);
+  align-items: start;
+}
+.ftr-grid--4 { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.2fr) minmax(0, 0.7fr) minmax(0, 0.9fr); }
+
+/* Marca */
+.ftr-brand { display: grid; gap: var(--space-sm); justify-items: start; }
+.ftr-logo { width: min(260px, 100%); height: auto; aspect-ratio: 320 / 213; margin-left: -0.5rem; }
+.ftr-lema {
+  max-width: 26ch;
+  font-size: var(--fs-small);
+  line-height: 1.55;
+  color: var(--color-steel);
+}
+.ftr-zona {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-cream);
+}
+.ftr-tel {
+  display: inline-grid;
+  gap: 0.15rem;
+  margin-top: 0.25rem;
+  min-height: 44px;
+}
+.ftr-tel-label {
+  font-family: var(--font-display);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-steel);
+}
+.ftr-tel-num {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 1.5rem + 1.4vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-yellow);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.ftr-tel:hover .ftr-tel-num { color: var(--color-yellow-lt); }
+
+/* Columnas */
+.ftr-col-title {
+  margin-bottom: var(--space-sm);
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-line);
+  font-family: var(--font-display);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-steel);
+}
+.ftr-list { display: grid; gap: 0.1rem; }
+.ftr-link {
+  display: inline-block;
+  padding-block: 0.3rem;
+  font-size: var(--fs-small);
+  line-height: 1.4;
+  color: rgba(244, 242, 237, 0.74);
+  transition: color var(--dur-fast) var(--ease-out), transform var(--dur) var(--ease-out);
+}
+.ftr-link:hover { color: var(--color-yellow); transform: translateX(4px); }
+
+.ftr-address { font-style: normal; display: grid; gap: var(--space-sm); font-size: var(--fs-small); color: rgba(244, 242, 237, 0.74); }
+.ftr-address-label {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-family: var(--font-display);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-steel);
+}
+
+/* ── Marca de agua ────────────────────────────────────────── */
+.ftr-watermark {
+  position: relative;
+  z-index: 0;
+  margin-top: clamp(2rem, 5vw, 4rem);
+  margin-bottom: -0.1em;
+  font-family: var(--font-display);
+  font-size: min(16.5vw, 15rem);
+  font-weight: 900;
+  line-height: 0.8;
+  letter-spacing: 0.01em;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--color-line);
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ── Línea inferior ───────────────────────────────────────── */
+.ftr-bottom {
+  position: relative;
+  z-index: 1;
+  background: var(--color-deep);
+  /* + 4rem: hueco para los botones flotantes (AccesoRapido), que no deben tapar esta fila */
+  padding-bottom: calc(max(1.5rem, env(safe-area-inset-bottom)) + 4rem);
+}
+.ftr-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem var(--space-md);
+  padding-top: 1.25rem;
+}
+.ftr-copy { font-size: 0.8125rem; color: var(--color-steel); }
+.ftr-legal { display: flex; flex-wrap: wrap; gap: 0 1.5rem; }
+.ftr-legal-link {
+  display: inline-block;
+  padding-block: 0.5rem;
+  font-size: 0.8125rem;
+  color: rgba(244, 242, 237, 0.74);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  text-decoration-color: var(--color-line-strong);
+  transition: color var(--dur-fast) var(--ease-out), text-decoration-color var(--dur-fast) var(--ease-out);
+}
+.ftr-legal-link:hover { color: var(--color-yellow); text-decoration-color: currentColor; }
+
+.ftr-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-cream);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.ftr-top svg { color: var(--color-yellow); transition: translate var(--dur) var(--ease-out); }
+.ftr-top:hover { color: var(--color-yellow); }
+.ftr-top:hover svg { translate: 0 -3px; }
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .ftr-grid--4 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .ftr-grid--4 .ftr-brand { grid-column: 1 / -1; }
+}
+@media (max-width: 900px) {
+  .ftr-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .ftr-brand { grid-column: 1 / -1; grid-template-columns: auto 1fr; align-items: center; column-gap: var(--space-md); }
+  .ftr-logo { grid-row: span 2; width: 200px; }
+  .ftr-col--servicios { grid-column: 1 / -1; }
+  .ftr-col--servicios .ftr-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-md); }
+}
+@media (max-width: 700px) {
+  .ftr-cta-actions { width: 100%; grid-template-columns: 1fr; }
+  .ftr-cta-actions .btn-primary,
+  .ftr-cta-actions .btn-outline { width: 100%; }
+}
+@media (max-width: 600px) {
+  .ftr-cta-inner { align-items: flex-start; }
+  .ftr-brand { grid-template-columns: 1fr; }
+  .ftr-logo { grid-row: auto; width: min(240px, 100%); }
+  .ftr-col--servicios .ftr-list { grid-template-columns: 1fr; }
+  .ftr-grid { grid-template-columns: 1fr; }
+  .ftr-bottom-row { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+  .ftr-watermark { font-size: 15.5vw; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ftr-link:hover { transform: none; }
+  .ftr-top:hover svg { translate: none; }
+}

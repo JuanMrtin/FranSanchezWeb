@@ -1,0 +1,218 @@
+/* ── Diálogo legal (<dialog> nativo, modal) ───────────────────────
+   Panel con esquinas de registro, cabecera fija con el botón de cierre y
+   cuerpo de lectura a 64ch. Prefijo de clases: legal-  */
+
+.legal-dialog {
+  width: min(100% - 2rem, 46rem);
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-cream);
+  overflow: visible;   /* las esquinas del marco sobresalen 1 px */
+}
+.legal-dialog:focus-visible { outline: none; }
+.legal-panel:focus-visible { outline-offset: -3px; }
+.legal-dialog::backdrop { background: rgba(8, 8, 8, 0.8); }
+
+.legal-frame { background: var(--color-surface); }
+.legal-panel {
+  max-height: min(100dvh - 2rem, 56rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line-strong);
+}
+
+/* Cabecera pegada arriba mientras se lee */
+.legal-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: clamp(1.25rem, 3vw, 1.75rem) clamp(1.25rem, 4vw, 2.5rem) 1.25rem;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-line);
+}
+.legal-head-text { display: grid; gap: 0.6rem; min-width: 0; }
+.legal-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-display-m);
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--color-cream);
+}
+
+.legal-close {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 44px;
+  padding: 0 1rem;
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-cream);
+  border: 1.5px solid var(--color-line-strong);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.legal-close:hover { border-color: var(--color-yellow); color: var(--color-yellow); }
+
+/* Cuerpo de lectura */
+.legal-body {
+  padding: clamp(1.25rem, 3vw, 2rem) clamp(1.25rem, 4vw, 2.5rem) clamp(2rem, 5vw, 3rem);
+  counter-reset: legal-seccion;
+}
+.legal-body > *,
+.legal-section > * { max-width: 64ch; }
+
+.legal-lead {
+  font-size: var(--fs-lead);
+  line-height: 1.55;
+  color: var(--color-steel);
+}
+
+.legal-section {
+  margin-top: clamp(1.75rem, 4vw, 2.5rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-line);
+  counter-increment: legal-seccion;
+}
+.legal-h3 {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  margin-bottom: 0.9rem;
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-cream);
+}
+.legal-h3::before {
+  content: counter(legal-seccion, decimal-leading-zero);
+  flex: none;
+  font-size: 0.8125rem;
+  letter-spacing: 0.16em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-yellow);
+}
+
+.legal-section p,
+.legal-list {
+  font-size: 0.96875rem;
+  line-height: 1.7;
+  color: rgba(244, 242, 237, 0.82);
+}
+.legal-section p + p,
+.legal-section p + .legal-list,
+.legal-list + p,
+.legal-section p + .legal-datos,
+.legal-datos + p { margin-top: 0.85rem; }
+.legal-section strong { color: var(--color-cream); font-weight: 600; }
+
+.legal-list { display: grid; gap: 0.4rem; }
+.legal-list li { position: relative; padding-left: 1.4rem; }
+.legal-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.78em;
+  width: 0.55rem;
+  height: 2px;
+  background: var(--color-yellow);
+}
+
+/* Datos del titular: etiqueta + valor */
+.legal-datos {
+  display: grid;
+  border: 1px solid var(--color-line);
+  background: rgba(8, 8, 8, 0.35);
+}
+.legal-datos > div {
+  display: grid;
+  grid-template-columns: minmax(8rem, 11rem) 1fr;
+  gap: 0.25rem 1rem;
+  padding: 0.7rem 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+.legal-datos > div + div { border-top: 1px solid var(--color-line); }
+.legal-datos dt {
+  font-family: var(--font-display);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-steel);
+  padding-top: 0.2em;
+}
+.legal-datos dd { color: var(--color-cream); overflow-wrap: anywhere; }
+
+/* Marcador de dato que el titular aún no ha aportado */
+.legal-pending {
+  display: inline-block;
+  padding: 0.05em 0.5em;
+  font-size: 0.875em;
+  line-height: 1.5;
+  color: var(--color-yellow);
+  background: rgba(255, 170, 24, 0.08);
+  border: 1px dashed rgba(255, 170, 24, 0.55);
+  border-radius: var(--radius-sm);
+}
+
+.legal-section a {
+  color: var(--color-yellow);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  overflow-wrap: anywhere;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.legal-section a:hover { color: var(--color-yellow-lt); }
+
+/* ── Entrada / salida ─────────────────────────────────────── */
+@keyframes legal-entra { from { opacity: 0; transform: translateY(14px); } }
+@keyframes legal-sale  { to   { opacity: 0; transform: translateY(8px); } }
+@keyframes legal-fondo-entra { from { opacity: 0; } }
+@keyframes legal-fondo-sale  { to   { opacity: 0; } }
+
+.legal-dialog[open] { animation: legal-entra var(--dur) var(--ease-out); }
+.legal-dialog[open]::backdrop { animation: legal-fondo-entra var(--dur) var(--ease-out); }
+.legal-dialog[data-cerrando] { animation: legal-sale var(--dur-fast) ease-in forwards; }
+.legal-dialog[data-cerrando]::backdrop { animation: legal-fondo-sale var(--dur-fast) ease-in forwards; }
+
+/* ── Móvil: hoja a pantalla completa ──────────────────────── */
+@media (max-width: 600px) {
+  .legal-dialog {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+  }
+  .legal-frame { height: 100%; }
+  .legal-panel { max-height: none; height: 100%; border: 0; }
+  .legal-frame::before,
+  .legal-frame::after { display: none; }
+  .legal-datos > div { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .legal-dialog[open],
+  .legal-dialog[open]::backdrop,
+  .legal-dialog[data-cerrando],
+  .legal-dialog[data-cerrando]::backdrop { animation: none; }
+}

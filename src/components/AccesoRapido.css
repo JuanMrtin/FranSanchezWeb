@@ -1,0 +1,120 @@
+/* ── Acceso rápido (botones flotantes) ───────────────────────────
+   «Llamar» + «WhatsApp», abajo a la derecha. Móvil: dos círculos de 52 px siempre
+   visibles. Escritorio (≥ 1025 px): píldoras con texto que entran al dejar atrás el hero.
+   Entrada y salida solo con opacity/transform; oculto = visibility: hidden, así tampoco
+   reciben foco. El Footer reserva hueco inferior para que nunca lo tape este bloque.
+   Prefijo de clases: fab-  */
+
+.fab {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  z-index: calc(var(--z-header) - 1);   /* sobre las secciones, bajo la cabecera y el menú */
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  /* visibility espera a que termine la salida para no cortar la transición */
+  transition:
+    opacity var(--dur) var(--ease-out),
+    transform var(--dur) var(--ease-out),
+    visibility 0s linear var(--dur);
+}
+.fab--visible {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0s;
+}
+
+.fab-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  transition:
+    background-color var(--dur) var(--ease-out),
+    color var(--dur) var(--ease-out),
+    border-color var(--dur) var(--ease-out),
+    box-shadow var(--dur) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+.fab-btn svg { flex: none; }
+.fab-btn:active { transform: scale(0.96); }
+
+/* Etiqueta de texto: solo en escritorio (en móvil el nombre accesible lo da aria-label) */
+.fab-label { display: none; }
+
+/* Principal: amarillo con icono oscuro */
+.fab-btn--whatsapp {
+  background: var(--color-yellow);
+  color: var(--color-carbon);
+}
+.fab-btn--whatsapp:hover {
+  background: var(--color-yellow-lt);
+  box-shadow: 0 0 0 1px var(--color-yellow-lt), 0 10px 34px rgba(255, 170, 24, 0.32);
+}
+.fab-btn--whatsapp:active { background: var(--color-yellow-dk); }
+.fab-btn--whatsapp:focus-visible { outline-color: var(--color-cream); }
+
+/* Secundario: superficie oscura con borde */
+.fab-btn--llamar {
+  background: rgba(8, 8, 8, 0.92);
+  color: var(--color-cream);
+  border: 1.5px solid var(--color-line-strong);
+}
+.fab-btn--llamar svg { color: var(--color-yellow); }
+.fab-btn--llamar:hover {
+  border-color: var(--color-yellow);
+  color: var(--color-yellow);
+}
+
+/* ── Escritorio: píldoras con texto ───────────────────────── */
+@media (min-width: 1025px) {
+  .fab {
+    right: max(1.5rem, env(safe-area-inset-right));
+    bottom: max(1.5rem, env(safe-area-inset-bottom));
+    gap: 0.75rem;
+  }
+  .fab-btn {
+    width: auto;
+    padding: 0 1.5rem 0 1.2rem;
+    border-radius: 999px;
+  }
+  .fab-label {
+    display: inline;
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+}
+
+/* Elevación al pasar el ratón: solo con puntero real y sin «reducir movimiento» */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .fab-btn:hover { transform: translateY(-2px); }
+  .fab-btn:active { transform: scale(0.96); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fab,
+  .fab--visible,
+  .fab-btn:active { transform: none; }
+}
+
+@media print {
+  .fab { display: none; }
+}
+
+/* En escritorio la cabecera ya muestra el teléfono: solo queda el botón de WhatsApp, que tapa menos contenido */
+@media (min-width: 1025px) {
+  .fab-btn--llamar { display: none; }
+}

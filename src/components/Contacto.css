@@ -1,0 +1,392 @@
+/* ── 06 · Contacto ──────────────────────────────────────────────
+   Columna informativa + panel de formulario con marco técnico.
+   Dos salidas: enviar por WhatsApp (principal) o llamar.
+   Fondo opaco: la sección tapa por completo el canvas fijo. */
+.contacto {
+  padding-block: var(--section-y);
+  background: var(--color-carbon);
+  border-top: 1px solid var(--color-line);
+}
+.contacto::after {
+  /* tramo amarillo sobre la línea superior, como una cota de plano */
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: max(var(--gutter), calc((100% - var(--container)) / 2 + var(--gutter)));
+  width: 3rem;
+  height: 3px;
+  background: var(--color-yellow);
+}
+
+.contacto-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(2.5rem, 5vw, 6rem);
+  align-items: start;
+}
+
+/* ── Columna informativa ───────────────────────────────────── */
+.contacto-info { display: grid; gap: var(--space-sm); justify-items: start; min-width: 0; }
+.contacto-titulo { margin-top: var(--space-xs); }
+.contacto-lead { margin-bottom: var(--space-xs); }
+
+/* Teléfono: la acción más rápida, grande y clicable */
+.contacto-tel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  width: 100%;
+  max-width: 30rem;
+  min-height: 5.5rem;
+  padding: 1rem 1.25rem;
+  background: var(--color-deep);
+  border: 1px solid var(--color-line-strong);
+  border-left: 3px solid var(--color-yellow);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--dur) var(--ease-out), background-color var(--dur) var(--ease-out), transform var(--dur) var(--ease-out);
+}
+.contacto-tel-ico {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 3.25rem;
+  height: 3.25rem;
+  color: var(--color-carbon);
+  background: var(--color-yellow);
+  border-radius: 50%;
+}
+.contacto-tel-ico svg { width: 1.4rem; height: 1.4rem; transform-origin: 50% 60%; }
+.contacto-tel-ico::before {
+  /* onda que se expande al pasar el ratón */
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--color-yellow);
+  border-radius: 50%;
+  opacity: 0;
+}
+.contacto-tel-texto { display: grid; gap: 0.15rem; min-width: 0; }
+.contacto-tel-num {
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 1.5rem + 2.6vw, 3rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--color-cream);
+  font-variant-numeric: tabular-nums;
+}
+.contacto-tel-flecha {
+  display: grid;
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--color-yellow);
+  transition: transform var(--dur) var(--ease-out);
+}
+.contacto-tel:focus-visible { outline-offset: 4px; }
+@media (hover: hover) {
+  .contacto-tel:hover { background: var(--color-surface); border-color: var(--color-yellow); }
+  .contacto-tel:hover .contacto-tel-flecha { transform: translateX(5px); }
+  .contacto-tel:hover .contacto-tel-ico svg { animation: contacto-sonar 0.6s var(--ease-out) 1; }
+  .contacto-tel:hover .contacto-tel-ico::before { animation: contacto-onda 0.9s var(--ease-out) 1; }
+}
+@keyframes contacto-sonar {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(-16deg); }
+  40% { transform: rotate(14deg); }
+  60% { transform: rotate(-9deg); }
+  80% { transform: rotate(5deg); }
+}
+@keyframes contacto-onda {
+  from { opacity: 0.8; transform: scale(1); }
+  to   { opacity: 0;   transform: scale(1.7); }
+}
+
+/* Atajo a WhatsApp: segunda vía, más discreta que el teléfono */
+.contacto-wa {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 30rem;
+  min-height: 4.25rem;
+  padding: 0.75rem 1.25rem;
+  background: transparent;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-sm);
+  transition: border-color var(--dur) var(--ease-out), background-color var(--dur) var(--ease-out);
+}
+.contacto-wa-ico { display: grid; place-items: center; flex-shrink: 0; width: 3.25rem; color: var(--color-yellow); }
+.contacto-wa-texto { display: grid; gap: 0.1rem; min-width: 0; }
+.contacto-wa-detalle { font-size: var(--fs-small); line-height: 1.4; color: var(--color-steel); }
+.contacto-wa-flecha {
+  display: grid;
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--color-steel);
+  transition: transform var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
+}
+.contacto-wa:focus-visible { outline-offset: 4px; }
+@media (hover: hover) {
+  .contacto-wa:hover { background: var(--color-surface); border-color: var(--color-yellow); }
+  .contacto-wa:hover .contacto-wa-flecha { transform: translateX(5px); color: var(--color-yellow); }
+}
+
+/* Datos opcionales de la empresa (solo si existen) */
+.contacto-datos { display: grid; gap: 0.9rem; margin-top: var(--space-xs); }
+.contacto-datos li { display: grid; gap: 0.2rem; }
+.contacto-datos address,
+.contacto-datos .contacto-zona { font-style: normal; color: var(--color-cream); }
+
+/* Qué datos nos ayudan */
+.contacto-ayuda { width: 100%; max-width: 30rem; margin-top: var(--space-sm); padding-top: var(--space-sm); border-top: 1px solid var(--color-line); }
+.contacto-ayuda-titulo {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-cream);
+  margin-bottom: 0.9rem;
+}
+.contacto-ayuda-lista { display: grid; gap: 0.85rem; }
+.contacto-ayuda-lista li { display: grid; grid-template-columns: 2rem 1fr; gap: 0.6rem; align-items: baseline; }
+.contacto-ayuda-num {
+  font-family: var(--font-display);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--color-yellow);
+  font-variant-numeric: tabular-nums;
+}
+.contacto-ayuda-lista strong { display: block; color: var(--color-cream); font-weight: 600; font-size: var(--fs-small); }
+.contacto-ayuda-texto { display: block; color: var(--color-steel); font-size: var(--fs-small); line-height: 1.5; }
+
+/* ── Panel del formulario ──────────────────────────────────── */
+.contacto-panel {
+  min-width: 0;
+  background: var(--color-deep);
+  border: 1px solid var(--color-line);
+  padding: clamp(1.25rem, 3vw, 2.75rem);
+  box-shadow: var(--shadow-panel);
+}
+.contacto-panel-cab {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35rem 1.5rem;
+  margin-bottom: 0.85rem;
+}
+.contacto-panel-titulo {
+  font-family: var(--font-display);
+  font-size: var(--fs-display-m);
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--color-cream);
+}
+.contacto-panel-nota { font-size: var(--fs-small); color: var(--color-steel); }
+.contacto-panel .tech-rule { margin-bottom: clamp(1.25rem, 2.5vw, 2rem); }
+
+/* ── Campos ────────────────────────────────────────────────── */
+.contacto-campos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem 1.25rem;
+}
+.campo { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; }
+.campo--ancho { grid-column: 1 / -1; }
+
+.campo-label {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-cream);
+}
+.campo-obligatorio { color: var(--color-yellow); }
+.campo-opcional { font-weight: 500; letter-spacing: 0.06em; color: var(--color-steel); }
+.campo-pie { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.campo-ayuda { font-size: 0.8125rem; line-height: 1.45; color: var(--color-steel); }
+.campo-contador {
+  flex-shrink: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--color-steel);
+  font-variant-numeric: tabular-nums;
+}
+.campo-contador--lleno { color: var(--color-yellow); }
+
+.campo-control {
+  width: 100%;
+  min-height: 3.25rem;
+  padding: 0.8rem 1rem;
+  font-family: var(--font-body);
+  font-size: 1rem; /* 16 px: evita el zoom automático en iOS */
+  line-height: 1.4;
+  color: var(--color-cream);
+  background: var(--color-carbon);
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-sm);
+  appearance: none;
+  transition: border-color var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out);
+}
+.campo-control::placeholder { color: rgba(154, 158, 164, 0.78); }
+.campo-control:hover { border-color: var(--color-steel); background: var(--color-surface); }
+.campo-control:focus-visible {
+  outline: 2px solid var(--color-yellow);
+  outline-offset: 2px;
+  border-color: var(--color-yellow);
+  background: var(--color-surface);
+}
+.campo-area { min-height: 9rem; resize: vertical; }
+
+.campo-caja { position: relative; }
+.campo-select {
+  cursor: pointer;
+  padding-right: 2.75rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFAA18' stroke-width='2.25'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  background-size: 1.1rem;
+}
+.campo-select option { background: var(--color-carbon); color: var(--color-cream); }
+
+/* Destello breve al preseleccionar el servicio desde una tarjeta */
+.campo--flash .campo-caja::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border: 2px solid var(--color-yellow);
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+  animation: contacto-destello 1.4s var(--ease-out) 1 both;
+}
+@keyframes contacto-destello {
+  0%   { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.02); }
+}
+
+/* Error de campo: borde + icono + texto (no solo color) */
+.campo--error .campo-control { border-color: var(--color-danger); }
+.campo-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--color-danger);
+}
+.campo-error svg { flex-shrink: 0; margin-top: 0.15rem; }
+
+/* ── Las dos salidas: WhatsApp (principal) y llamada ───────── */
+.contacto-cta {
+  /* dos columnas si caben las dos etiquetas en una línea; si no, una debajo de otra */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+.contacto-enviar,
+.contacto-llamar {
+  min-height: 3.75rem;
+  padding-inline: 1rem;
+  font-size: 1.1875rem;
+  letter-spacing: 0.06em;
+  white-space: normal;
+  text-align: center;
+}
+.contacto-llamar:hover { background: var(--color-surface); }
+
+.contacto-nota {
+  margin-top: 1rem;
+  max-width: 62ch;
+  font-size: var(--fs-small);
+  line-height: 1.6;
+  color: var(--color-steel);
+}
+
+/* ── Aviso tras abrir WhatsApp (no dice «enviado») ─────────── */
+.contacto-resultado { margin-top: 1.25rem; }
+.contacto-resultado:empty { display: none; }
+.contacto-aviso {
+  display: flex;
+  gap: 1rem;
+  padding: 1.15rem 1.25rem 1.25rem;
+  background: var(--color-carbon);
+  border: 1px solid var(--color-line-strong);
+  border-left: 3px solid var(--color-yellow);
+  border-radius: var(--radius-sm);
+  animation: contacto-entrada var(--dur-slow) var(--ease-out) 1 both;
+}
+.contacto-aviso-ico { flex-shrink: 0; margin-top: 0.1rem; color: var(--color-yellow); }
+.contacto-aviso-cuerpo { min-width: 0; }
+.contacto-aviso-titulo {
+  margin-bottom: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: var(--color-cream);
+}
+.contacto-aviso-cuerpo > p {
+  max-width: 60ch;
+  font-size: var(--fs-small);
+  line-height: 1.6;
+  color: var(--color-steel);
+}
+.contacto-mensaje {
+  margin-top: 0.9rem;
+  padding: 0.85rem 1rem;
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--color-cream);
+  background: var(--color-deep);
+  border: 1px dashed var(--color-line-strong);
+  border-radius: var(--radius-sm);
+}
+.contacto-aviso-acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.5rem; margin-top: 1rem; }
+.contacto-aviso-acciones .btn { white-space: normal; text-align: center; }
+.contacto-aviso-cuerpo > .contacto-aviso-pista { margin-top: 0.5rem; }
+.contacto-volver {
+  min-height: 2.75rem;
+  padding-block: 0.5rem;
+  font-size: var(--fs-small);
+  color: var(--color-steel);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.contacto-volver:hover { color: var(--color-cream); }
+@keyframes contacto-entrada { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+/* ── Tablet: una columna, formulario en dos ────────────────── */
+@media (max-width: 1024px) {
+  .contacto-grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-lg); }
+  .contacto-tel, .contacto-wa, .contacto-ayuda { max-width: none; }
+  .contacto-ayuda-lista { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 2rem; }
+}
+
+/* ── Móvil: composición propia ─────────────────────────────── */
+@media (max-width: 640px) {
+  .contacto-campos { grid-template-columns: minmax(0, 1fr); gap: 1.15rem; }
+  .contacto-panel { padding: 1.25rem 1rem 1.5rem; }
+  .contacto-panel-cab { flex-direction: column; align-items: flex-start; }
+  .contacto-tel { padding: 0.9rem 1rem; gap: 0.9rem; min-height: 5rem; }
+  .contacto-tel-ico { width: 3rem; height: 3rem; }
+  .contacto-wa { padding: 0.7rem 1rem; gap: 0.5rem; }
+  .contacto-wa-ico { width: 2.75rem; }
+  /* la ayuda se reduce a los títulos (el texto sigue para lectores de pantalla) */
+  .contacto-ayuda-lista { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem 1rem; }
+  .contacto-ayuda-lista li { grid-template-columns: 1.6rem 1fr; }
+  .contacto-ayuda-texto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+  .contacto-aviso { flex-direction: column; gap: 0.6rem; padding: 1rem; }
+  .contacto-aviso-acciones { flex-direction: column; align-items: stretch; gap: 0.25rem; }
+}
